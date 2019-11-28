@@ -35,6 +35,9 @@ function setAudience(){
     		else if (randomAd == 3){
     			audience[i][j] = game.add.sprite(300 + 32 * j, 100 + 32 * i,'purple_audience');
     		}
+    		audience[i][j].scale.set(2);
+    		audience[i][j].animations.add('cheer');
+    		audience[i][j].animations.play('cheer', 1, true);
     	}
     }
 }
