@@ -3,10 +3,10 @@ var whiteAd;
 var audience = new Array(4);
 
 function preload() {
-    game.load.atlasJSONHash('white_audience', 'assets/images/audience_white_sprite.png', 'assets/images/cheer.json');
-    game.load.atlasJSONHash('red_audience', 'assets/images/audience_red_sprite.png', 'assets/images/cheer.json');
-    game.load.atlasJSONHash('yellow_audience', 'assets/images/audience_yellow_sprite.png','assets/images/cheer.json');
-    game.load.atlasJSONHash('purple_audience', 'assets/images/audience_purple_sprite.png', 'assets/images/cheer.json');
+    game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
+    game.load.spritesheet('red_audience', 'assets/images/audience_red_sprite.png', 24,32);
+    game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
+    game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
 
 }
 function create() {
