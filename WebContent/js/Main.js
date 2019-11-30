@@ -14,11 +14,11 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
-    //game.load.image('sky', 'assets/images/sky.png');
+    game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
     game.load.image('light', 'assets/images/light.png');
-    //game.load.image('ground', 'assets/images/ground.png');
+    game.load.image('ground', 'assets/images/ground.png');
 }
 
 function create() {
@@ -26,27 +26,28 @@ function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.physics.arcade.gravity.y = 654;
 	game.world.setBounds(0, 0, 8500, 3600);
-	//background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
-	//background.autoScroll(10,0);
+	background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
+	background.scale.set(10);
+	background.autoScroll(10,0);
 	setLight();
 	runway[0] = game.add.tileSprite(0, 3180, 1650, 840, 'runway');
 	runway[0].scale.set(1,0.5);
 	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
 	runway[1].scale.set(1,0.5);
-	//ground = game.add.tileSprite(0, 1800, 8500, 3600, 'ground');
-	//ground.scale.set(1,0.5);
+	ground = game.add.tileSprite(1640, 3453, 6860, 295, 'ground');
+	ground.scale.set(1,0.5);
 	game.physics.enable(runway,Phaser.Physics.ARCADE);
-	//game.physics.enable(ground,Phaser.Physics.ARCADE);
+	game.physics.enable(ground,Phaser.Physics.ARCADE);
 	runway[0].body.immovable = true;
 	runway[0].body.moves = false;
 	runway[1].body.immovable = true;
 	runway[1].body.moves = false;
-	//ground.body.immovable = true;
-	//ground.body.moves = false;
+	ground.body.immovable = true;
+	ground.body.moves = false;
 	runway[0].body.setSize(1650,20,0,730);
 	runway[1].body.setSize(1650,20,0,730);
 	runway[1].body.setSize(1650,20,0,730);
-	//ground.body.setSize(1650,20,0,730);
+	ground.body.setSize(1650,20,0,730);
 	setAudience();
 	setPlayer();
 	cursors = game.input.keyboard.createCursorKeys();
