@@ -43,6 +43,10 @@ function create() {
 	runway[1].body.moves = false;
 	//ground.body.immovable = true;
 	//ground.body.moves = false;
+	runway[0].body.setSize(1650,20,0,730);
+	runway[1].body.setSize(1650,20,0,730);
+	runway[1].body.setSize(1650,20,0,730);
+	//ground.body.setSize(1650,20,0,730);
 	setAudience();
 	setPlayer();
 	cursors = game.input.keyboard.createCursorKeys();
@@ -97,31 +101,38 @@ function setPlayer(){
 	player.body.allowGravity = true;
 	player.animations.add('play');
 	player.animations.play('play', 10, true);
+	player.body.bounce.setTo(0.1);
 	player.body.collideWorldBounds = true;
+	player.body.maxVelocity.set(600);
 }
 
+
 function update() {
+	game.physics.arcade.collide(player, runway);
+	game.physics.arcade.collide(player, ground);
 	if (cursors.right.isDown){
 		acc = true;
 	}
+	if(cursors.right.isUp){
+		player.body.drag.x = 800;
+	}
 	if (cursors.right.isUp && acc)
     {
-        player.body.acceleration.set(333,0);
-        setTimeout("player.body.acceleration.set(0);", 200 );
+		player.body.drag.x = 0;
+        player.body.acceleration.set(600,0);
+        setTimeout("player.body.acceleration.set(0);", 100 );
         acc = false;
     }
-	if (cursors.left.isDown){
-		 player.body.velocity.set(0);
-	}
 }
 
 function render() {
-	var p_zone = player.getBounds();
-    	game.context.fillStyle = 'rgba(0,0,0,0.6)';
-    	game.context.fillRect(p_zone.x, p_zone.y, p_zone.width, p_zone.height);
-	 var zone = new Phaser.Rectangle(player.body.x,player.body.y,player.body.width,player.body.height);
-	    game.context.fillStyle = 'rgba(255,0,0,0.6)';
-	    game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
-	   // game.debug.spriteBounds(player, 'pink', false);
 	game.debug.cameraInfo(game.camera, 32, 32);
+	var zone = new Phaser.Rectangle(player.x,player.y,player.width,player.height);
+		game.context.fillStyle = 'rgba(255,0,0,0.6)';
+		game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
+	var zone2 = new Phaser.Rectangle(runway[0].body.x,runway[0].body.y,runway[0].body.width,runway[0].body.height);
+    	game.context.fillStyle = 'rgba(255,0,0,0.6)';
+    	game.context.fillRect(zone2.x, zone2.y, zone2.width, zone2.height);
+	
 }
+
