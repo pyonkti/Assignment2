@@ -44,8 +44,11 @@ function create() {
 	runway[1].body.moves = false;
 	ground.body.immovable = true;
 	ground.body.moves = false;
+	runway[0].body.setSize(1650,20,0,730);
+	runway[1].body.setSize(1650,20,0,730);
+	runway[1].body.setSize(1650,20,0,730);
+	ground.body.setSize(1650,20,0,730);
 	setAudience();
-	//backAndForth();
 	setPlayer();
 	cursors = game.input.keyboard.createCursorKeys();
 	game.camera.follow(player);
@@ -95,65 +98,42 @@ function setLight(){
 function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
 	game.physics.enable(player,Phaser.Physics.ARCADE);
-	player.body.velocity.set(0,-2000);
 	player.scale.set(6);
 	player.body.allowGravity = true;
 	player.animations.add('play');
 	player.animations.play('play', 10, true);
+	player.body.bounce.setTo(0.1);
 	player.body.collideWorldBounds = true;
+	player.body.maxVelocity.set(600);
 }
 
+
 function update() {
+	game.physics.arcade.collide(player, runway);
+	game.physics.arcade.collide(player, ground);
 	if (cursors.right.isDown){
 		acc = true;
 	}
+	if(cursors.right.isUp){
+		player.body.drag.x = 800;
+	}
 	if (cursors.right.isUp && acc)
     {
-        player.body.acceleration.set(333,0);
-        setTimeout("player.body.acceleration.set(0);", 200 );
+		player.body.drag.x = 0;
+        player.body.acceleration.set(600,0);
+        setTimeout("player.body.acceleration.set(0);", 100 );
         acc = false;
     }
-	if (cursors.left.isDown){
-		 player.body.velocity.set(0);
-	}
-}
-
-function backAndForth(){
-	//定义移动的距离
-	var rumbleOffset = 50;
-	//从相机当前的位置开始移动
-	var properties = {
-		x: background.x + rumbleOffset
-	};
-	//持续时间
-	var duration = 1000;
-	//重复次数
-	var repeat = -1;
-	//动画方式，支持对象和字符串两种方式
-	var ease = Phaser.Easing.Linear.None;
-	//设置为true可以自动开始，false则需要手动调用start()方法
-	var autoStart = true;
-	//延迟x毫秒后开始
-	var delay = 0;
-	//是否回到起始位置
-	var yoyo = true;
-	
-	var quake = game.add.tween(background)
-		.to(properties, duration, ease, autoStart, delay, 0, yoyo);
-		quake.repeat(repeat);
-	//我们定义结束后重新开始动画
-	
-	//开始动画
-	quake.start();
 }
 
 function render() {
-	var p_zone = player.getBounds();
-    	game.context.fillStyle = 'rgba(0,0,0,0.6)';
-    	game.context.fillRect(p_zone.x, p_zone.y, p_zone.width, p_zone.height);
-	 var zone = new Phaser.Rectangle(player.body.x,player.body.y,player.body.width,player.body.height);
-	    game.context.fillStyle = 'rgba(255,0,0,0.6)';
-	    game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
-	   // game.debug.spriteBounds(player, 'pink', false);
 	game.debug.cameraInfo(game.camera, 32, 32);
+	var zone = new Phaser.Rectangle(player.x,player.y,player.width,player.height);
+		game.context.fillStyle = 'rgba(255,0,0,0.6)';
+		game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
+	var zone2 = new Phaser.Rectangle(runway[0].body.x,runway[0].body.y,runway[0].body.width,runway[0].body.height);
+    	game.context.fillStyle = 'rgba(255,0,0,0.6)';
+    	game.context.fillRect(zone2.x, zone2.y, zone2.width, zone2.height);
+	
 }
+
