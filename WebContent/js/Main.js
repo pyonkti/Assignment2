@@ -86,6 +86,7 @@ function setAudience(){
 function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
 	game.physics.enable(player,Phaser.Physics.ARCADE);
+	player.body.velocity.set(0,-2000);
 	player.scale.set(6);
 	player.body.allowGravity = true;
 	player.animations.add('play');
@@ -103,6 +104,9 @@ function update() {
         setTimeout("player.body.acceleration.set(0);", 200 );
         acc = false;
     }
+	if (cursors.left.isDown){
+		 player.body.velocity.set(0);
+	}
 }
 
 function backAndForth(){
