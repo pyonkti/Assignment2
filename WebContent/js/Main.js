@@ -6,6 +6,7 @@ var audienceSeat = new Array(3);
 var player;
 var cursors;
 var ground;
+var acc;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -33,6 +34,14 @@ function create() {
 	runway[1].scale.set(1,0.5);
 	ground = game.add.tileSprite(2780, 3180, 1650, 840, 'ground');
 	ground.scale.set(1,0.5);
+	game.physics.enable(runway,Phaser.Physics.ARCADE);
+	game.physics.enable(ground,Phaser.Physics.ARCADE);
+	runway[0].body.immovable = true;
+	runway[0].body.moves = false;
+	runway[1].body.immovable = true;
+	runway[1].body.moves = false;
+	ground.body.immovable = true;
+	ground.body.moves = false;
 	setAudience();
 	//backAndForth();
 	setPlayer();
@@ -78,21 +87,21 @@ function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
 	game.physics.enable(player,Phaser.Physics.ARCADE);
 	player.scale.set(6);
-	player.body.allowGravity = false;
+	player.body.allowGravity = true;
 	player.animations.add('play');
 	player.animations.play('play', 10, true);
 	player.body.collideWorldBounds = true;
 }
 
 function update() {
-	player.body.velocity.set(0);
-	if (cursors.right.isDown)
+	if (cursors.right.isDown){
+		acc = true;
+	}
+	if (cursors.right.isUp && acc)
     {
-        player.body.velocity = new Phaser.Point(800,0);
-    }
-	else if (cursors.left.isDown)
-    {
-		player.body.velocity.set(-800,0);
+        player.body.acceleration.set(333,0);
+        setTimeout("player.body.acceleration.set(0);", 200 );
+        acc = false;
     }
 }
 
