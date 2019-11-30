@@ -15,6 +15,7 @@ function preload() {
     game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
+    game.load.image('light', 'assets/images/light.png');
 }
 function create() {
 	game.stage.backgroundColor = "#3ed8fb";
@@ -34,6 +35,8 @@ function create() {
 	player.animations.play('play', 10, true);
 	player.scale.set(6);
 	background.autoScroll(10,0);
+	
+	setLight();
 }
 
 function setAudience(){
@@ -61,6 +64,13 @@ function setAudience(){
     		audience[i][j].animations.next(randomFr);
     	}
     }
+}
+
+function setLight(){
+	light = game.add.sprite(420,80,'light');
+	light.scale.set(5,5);
+	var fade = game.add.tween(light);
+	fade.to({alpha:0},3000,"Linear",true);
 }
 
 function update() {
@@ -95,7 +105,6 @@ function backAndForth(){
 	//开始动画
 	quake.start();
 }
-
 
 function render() {
 
