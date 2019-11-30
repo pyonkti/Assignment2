@@ -7,6 +7,9 @@ var player;
 var cursors;
 var ground;
 var acc;
+var map;
+var tileset;
+var layer;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -14,7 +17,8 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
-    //game.load.image('sky', 'assets/images/sky.png');
+    game.load.tilemap('map', 'assets/images/sky.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
     game.load.image('light', 'assets/images/light.png');
@@ -24,6 +28,10 @@ function preload() {
 function create() {
 	game.stage.backgroundColor = "#3ed8fb";
 	game.physics.startSystem(Phaser.Physics.ARCADE);
+	map = game.add.tilemap('map');
+	map.addTilesetImage('sky');
+	layer = map.createLayer('Tile Layer 1');
+	layer.resizeWorld();
 	game.physics.arcade.gravity.y = 654;
 	game.world.setBounds(0, 0, 8500, 3600);
 	//background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
@@ -109,7 +117,7 @@ function setPlayer(){
 
 function update() {
 	game.physics.arcade.collide(player, runway);
-	game.physics.arcade.collide(player, ground);
+	//game.physics.arcade.collide(player, ground);
 	if (cursors.right.isDown){
 		acc = true;
 	}
