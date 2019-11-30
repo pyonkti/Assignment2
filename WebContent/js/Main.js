@@ -14,38 +14,36 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
-    game.load.image('sky', 'assets/images/sky.png');
+    //game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
     game.load.image('light', 'assets/images/light.png');
-    game.load.image('ground', 'assets/images/ground.png');
+    //game.load.image('ground', 'assets/images/ground.png');
 }
 
 function create() {
 	game.stage.backgroundColor = "#3ed8fb";
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.physics.arcade.gravity.y = 654;
-	game.world.setBounds(0, 0, 8000, 3600);
-	background = game.add.tileSprite(0, 3000, 1680, 840, 'sky');
-	background.scale.set(0.8,0.7);
-	background.autoScroll(10,0);
+	game.world.setBounds(0, 0, 8500, 3600);
+	//background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
+	//background.autoScroll(10,0);
 	setLight();
 	runway[0] = game.add.tileSprite(0, 3180, 1650, 840, 'runway');
 	runway[0].scale.set(1,0.5);
 	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
 	runway[1].scale.set(1,0.5);
-	ground = game.add.tileSprite(2780, 3180, 1650, 840, 'ground');
-	ground.scale.set(1,0.5);
+	//ground = game.add.tileSprite(0, 1800, 8500, 3600, 'ground');
+	//ground.scale.set(1,0.5);
 	game.physics.enable(runway,Phaser.Physics.ARCADE);
-	game.physics.enable(ground,Phaser.Physics.ARCADE);
+	//game.physics.enable(ground,Phaser.Physics.ARCADE);
 	runway[0].body.immovable = true;
 	runway[0].body.moves = false;
 	runway[1].body.immovable = true;
 	runway[1].body.moves = false;
-	ground.body.immovable = true;
-	ground.body.moves = false;
+	//ground.body.immovable = true;
+	//ground.body.moves = false;
 	setAudience();
-	//backAndForth();
 	setPlayer();
 	cursors = game.input.keyboard.createCursorKeys();
 	game.camera.follow(player);
@@ -95,7 +93,6 @@ function setLight(){
 function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
 	game.physics.enable(player,Phaser.Physics.ARCADE);
-	player.body.velocity.set(0,-2000);
 	player.scale.set(6);
 	player.body.allowGravity = true;
 	player.animations.add('play');
@@ -116,35 +113,6 @@ function update() {
 	if (cursors.left.isDown){
 		 player.body.velocity.set(0);
 	}
-}
-
-function backAndForth(){
-	//定义移动的距离
-	var rumbleOffset = 50;
-	//从相机当前的位置开始移动
-	var properties = {
-		x: background.x + rumbleOffset
-	};
-	//持续时间
-	var duration = 1000;
-	//重复次数
-	var repeat = -1;
-	//动画方式，支持对象和字符串两种方式
-	var ease = Phaser.Easing.Linear.None;
-	//设置为true可以自动开始，false则需要手动调用start()方法
-	var autoStart = true;
-	//延迟x毫秒后开始
-	var delay = 0;
-	//是否回到起始位置
-	var yoyo = true;
-	
-	var quake = game.add.tween(background)
-		.to(properties, duration, ease, autoStart, delay, 0, yoyo);
-		quake.repeat(repeat);
-	//我们定义结束后重新开始动画
-	
-	//开始动画
-	quake.start();
 }
 
 function render() {
