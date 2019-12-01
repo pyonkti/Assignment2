@@ -33,10 +33,10 @@ function create() {
 	game.stage.backgroundColor = "#3ed8fb";
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.physics.arcade.gravity.y = 654;
-	game.world.setBounds(0, 0, 9600, 3600);
-	background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
-	background.autoScroll(20,0);
-	setLight();
+	game.world.setBounds(0, 0, 9640, 3600);
+	background = game.add.tileSprite(0, 0, 9640, 3600, 'sky');
+	background.scale.set(10);
+	background.autoScroll(10,0);
 	runway[0] = game.add.tileSprite(0, 3180, 1650, 840, 'runway');
 	runway[0].scale.set(1,0.5);
 	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
@@ -58,6 +58,7 @@ function create() {
 	javelin = game.add.sprite(player.body.x-100,player.body.y+120,'javelin');
 	javelin.anchor.x = 0.9;
 	javelin.anchor.y = 0.5;
+	setLight();
 	game.physics.enable(javelin,Phaser.Physics.ARCADE);
 	javelin.body.allowGravity = false;
 	cursors = game.input.keyboard.createCursorKeys();
@@ -100,10 +101,30 @@ function setAudience(){
 }
 
 function setLight(){
-	light = game.add.sprite(420,80,'light');
-	light.scale.set(5,5);
-	var fade = game.add.tween(light);
-	fade.to({alpha:0},3000,"Linear",true);
+	for(var k=0; k<3;k++)
+	{
+		for(var i=0;i<3;i++)
+	    {
+	    	for(var j=0;j<5;j++)
+	    	{
+	    		var randomAd = Math.floor(Math.random()*10)%2;
+//	    		var randomFr = Math.floor(Math.random()*3);
+	    		if (randomAd == 0){
+	    			light= game.add.sprite(850*k+420+64 * j+32*i, 3035 + 80* (i+1),'light');   
+		    		light.scale.set(5);
+		    		var fade = game.add.tween(light);
+		    		fade.to({alpha:0},2000,"Linear",true);
+	    		}	
+	    	}
+	    }
+	}
+	fade.delay(5000);
+	fade.onComplete.addOnce(setLight);
+	
+////	light = game.add.sprite(420,3100,'light');
+////	light.scale.set(5,5);
+////	var fade = game.add.tween(light);
+////	fade.to({alpha:0},2000,"Linear",true);
 }
 
 function setPlayer(){
