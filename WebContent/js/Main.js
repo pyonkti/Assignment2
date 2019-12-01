@@ -17,6 +17,7 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
+    //game.load.atlasJSONHash('player','assets/images/res_viewer_sprite.png','assets/images/player.json');
     game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
@@ -97,11 +98,11 @@ function setLight(){
 
 function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
+	player.animations.add('accelerate',[0,1,2],60,true);
+	player.animations.play('accelerate', 10, true);
 	game.physics.enable(player,Phaser.Physics.ARCADE);
 	player.scale.set(6);
 	player.body.allowGravity = true;
-	player.animations.add('play');
-	player.animations.play('play', 10, true);
 	player.body.bounce.setTo(0.1);
 	player.body.collideWorldBounds = true;
 	player.body.maxVelocity.set(600);
