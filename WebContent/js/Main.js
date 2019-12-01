@@ -4,9 +4,18 @@ var background;
 var runway = new Array(2);
 var audienceSeat = new Array(3);
 var player;
+var javelin;
 var cursors;
 var ground;
 var acc;
+var map;
+var tileset;
+var layer;
+var ac_ani;
+var ms_ani;
+var th_ani;
+var space_key;
+var hasThrown = false;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -14,6 +23,7 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
+    game.load.image('javelin', 'assets/images/javelin.png');
     game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
@@ -33,8 +43,7 @@ function create() {
 	runway[0].scale.set(1,0.5);
 	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
 	runway[1].scale.set(1,0.5);
-	ground = game.add.tileSprite(2780, 3453, 6860, 295, 'ground');
-	ground.scale.set(1,0.5);
+	ground = game.add.tileSprite(2780, 3395, 6845, 205, 'ground');
 	game.physics.enable(runway,Phaser.Physics.ARCADE);
 	game.physics.enable(ground,Phaser.Physics.ARCADE);
 	runway[0].body.immovable = true;
@@ -45,12 +54,16 @@ function create() {
 	ground.body.moves = false;
 	runway[0].body.setSize(1650,20,0,730);
 	runway[1].body.setSize(1650,20,0,730);
-	runway[1].body.setSize(1650,20,0,730);
-	ground.body.setSize(1650,20,0,730);
+	ground.body.setSize(6845,20,0,150);
 	setAudience();
 	setPlayer();
 	setLight();
+	javelin = game.add.sprite(2780,3395,'javelin');
+	game.physics.enable(javelin,Phaser.Physics.ARCADE);
+	javelin.body.setSize(278,10,0,0);
+	javelin.body.allowGravity = false;
 	cursors = game.input.keyboard.createCursorKeys();
+	space_key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	game.camera.follow(player);
 }
 
@@ -117,43 +130,75 @@ function setLight(){
 
 function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
+	ac_ani = player.animations.add('accelerate',[0,1,2],30,true);
+	ms_ani = player.animations.add('ms',[3,4,5],30,true);
+	th_ani = player.animations.add('th',[6,7,8,9,10,11,12,13],30,false);
+	player.animations.play('accelerate');
+	player.animations.paused = true;
 	game.physics.enable(player,Phaser.Physics.ARCADE);
 	player.scale.set(6);
 	player.body.allowGravity = true;
-	player.animations.add('play');
-	player.animations.play('play', 10, true);
 	player.body.bounce.setTo(0.1);
 	player.body.collideWorldBounds = true;
-	player.body.maxVelocity.set(600);
+	player.body.maxVelocity.set(800);
 }
 
 
 function update() {
 	game.physics.arcade.collide(player, runway);
 	game.physics.arcade.collide(player, ground);
-	if (cursors.right.isDown){
+	game.physics.arcade.collide(javelin, ground);
+	if(javelin.y == 3535){
+		javelin.body.velocity.set(0);
+	}
+	if (!hasThrown && cursors.right.isDown){
 		acc = true;
 	}
-	if(cursors.right.isUp){
-		player.body.drag.x = 800;
+	else if(cursors.right.isUp && !acc){
+		player.body.drag.x = 1000;
 	}
-	if (cursors.right.isUp && acc)
+	else if (cursors.right.isUp && acc && !hasThrown)
     {
 		player.body.drag.x = 0;
-        player.body.acceleration.set(600,0);
-        setTimeout("player.body.acceleration.set(0);", 100 );
+        player.body.acceleration.set(1000,0);
+        setTimeout("player.body.acceleration.set(0);", 200 );
         acc = false;
     }
+	if(player.body.velocity.x<2){
+		if(!player.animations.paused){
+			player.animations.paused = true;
+		}
+	}else if (player.body.velocity.x<750){
+		if(player.animations.paused){
+			player.animations.paused = false;
+		}
+		ac_ani.speed = Math.floor(player.body.velocity.x/50);
+	}else if(!hasThrown){
+			player.animations.play('ms',ac_ani.speed);
+			ms_ani.speed = Math.floor(player.body.velocity.x/50);
+			if(space_key.isDown){
+				dartJavelin();
+			}
+	}
+}
+
+function dartJavelin(){
+	player.animations.play('th');
+	hasThrown = true;
+	game.camera.follow(javelin);
+	fly(player.body.velocity.x);
+}
+
+function fly(vi){
+	javelin.body.allowGravity = true;
+	javelin.body.drag.x = 100;
+	var randomAngle = Math.floor(Math.random()*90)*(Math.PI/180);
+	var randomForceMagnitude = Math.random();	
+	javelin.body.velocity.set(vi+2133*randomForceMagnitude*Math.cos(randomAngle),-2133*randomForceMagnitude*Math.sin(randomAngle));
 }
 
 function render() {
 	game.debug.cameraInfo(game.camera, 32, 32);
-	var zone = new Phaser.Rectangle(player.x,player.y,player.width,player.height);
-		game.context.fillStyle = 'rgba(255,0,0,0.6)';
-		game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
-	var zone2 = new Phaser.Rectangle(runway[0].body.x,runway[0].body.y,runway[0].body.width,runway[0].body.height);
-    	game.context.fillStyle = 'rgba(255,0,0,0.6)';
-    	game.context.fillRect(zone2.x, zone2.y, zone2.width, zone2.height);
-	
+	game.debug.body(ground,'rgba(255,0,0,0.6)',true);
 }
 
