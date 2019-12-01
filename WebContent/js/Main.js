@@ -17,7 +17,6 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
-    //game.load.atlasJSONHash('player','assets/images/res_viewer_sprite.png','assets/images/player.json');
     game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
