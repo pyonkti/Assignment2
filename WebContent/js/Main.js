@@ -10,6 +10,11 @@ var acc;
 var map;
 var tileset;
 var layer;
+var ac_ani;
+var ms_ani;
+var th_ani;
+var space_key;
+var hasThrown = false;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -51,6 +56,7 @@ function create() {
 	setAudience();
 	setPlayer();
 	cursors = game.input.keyboard.createCursorKeys();
+	space_key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	game.camera.follow(player);
 }
 
@@ -97,14 +103,17 @@ function setLight(){
 
 function setPlayer(){
 	player = game.add.sprite(50, 3350,'player'); 
-	player.animations.add('accelerate',[0,1,2],60,true);
-	player.animations.play('accelerate', 10, true);
+	ac_ani = player.animations.add('accelerate',[0,1,2],30,true);
+	ms_ani = player.animations.add('ms',[3,4,5],30,true);
+	th_ani = player.animations.add('th',[6,7,8,9,10,11,12,13],30,false);
+	player.animations.play('accelerate');
+	player.animations.paused = true;
 	game.physics.enable(player,Phaser.Physics.ARCADE);
 	player.scale.set(6);
 	player.body.allowGravity = true;
 	player.body.bounce.setTo(0.1);
 	player.body.collideWorldBounds = true;
-	player.body.maxVelocity.set(600);
+	player.body.maxVelocity.set(800);
 }
 
 
@@ -114,26 +123,38 @@ function update() {
 	if (cursors.right.isDown){
 		acc = true;
 	}
-	if(cursors.right.isUp){
-		player.body.drag.x = 800;
+	else if(cursors.right.isUp && !acc){
+		player.body.drag.x = 1000;
 	}
-	if (cursors.right.isUp && acc)
+	else if (cursors.right.isUp && acc)
     {
 		player.body.drag.x = 0;
         player.body.acceleration.set(800,0);
         setTimeout("player.body.acceleration.set(0);", 100 );
         acc = false;
     }
+	if(player.body.velocity.x<2){
+		if(!player.animations.paused){
+			player.animations.paused = true;
+		}
+	}else if (player.body.velocity.x<750){
+		if(player.animations.paused){
+			player.animations.paused = false;
+		}
+		ac_ani.speed = Math.floor(player.body.velocity.x/50);
+	}else if(!hasThrown){
+			player.animations.play('ms',ac_ani.speed);
+			ms_ani.speed = Math.floor(player.body.velocity.x/50);
+			space_key.onDown.add(dartJavelin);
+	}
+}
+
+function dartJavelin(){
+	player.animations.play('th');
+	hasThrown = true;
 }
 
 function render() {
 	game.debug.cameraInfo(game.camera, 32, 32);
-	var zone = new Phaser.Rectangle(player.x,player.y,player.width,player.height);
-		game.context.fillStyle = 'rgba(255,0,0,0.6)';
-		game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
-	var zone2 = new Phaser.Rectangle(runway[0].body.x,runway[0].body.y,runway[0].body.width,runway[0].body.height);
-    	game.context.fillStyle = 'rgba(255,0,0,0.6)';
-    	game.context.fillRect(zone2.x, zone2.y, zone2.width, zone2.height);
-	
 }
 
