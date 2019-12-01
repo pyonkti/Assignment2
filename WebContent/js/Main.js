@@ -10,6 +10,7 @@ var acc;
 var map;
 var tileset;
 var layer;
+var layer_ground;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -22,7 +23,7 @@ function preload() {
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
     game.load.image('light', 'assets/images/light.png');
-    //game.load.image('ground', 'assets/images/ground.png');
+    game.load.image('ground', 'assets/images/ground.png');
 }
 
 function create() {
@@ -30,7 +31,9 @@ function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	map = game.add.tilemap('map');
 	map.addTilesetImage('sky');
+	map.addTilesetImage('ground');
 	layer = map.createLayer('Tile Layer 1');
+	layer_ground = map.createLayer('ground');
 	layer.resizeWorld();
 	game.physics.arcade.gravity.y = 654;
 	game.world.setBounds(0, 0, 8500, 3600);
