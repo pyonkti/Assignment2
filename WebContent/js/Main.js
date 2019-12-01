@@ -10,7 +10,6 @@ var acc;
 var map;
 var tileset;
 var layer;
-var layer_ground;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -18,7 +17,6 @@ function preload() {
     game.load.spritesheet('yellow_audience', 'assets/images/audience_yellow_sprite.png',24,32);
     game.load.spritesheet('purple_audience', 'assets/images/audience_purple_sprite.png', 24,32);
     game.load.spritesheet('player', 'assets/images/res_viewer_sprite.png', 24,32);
-    game.load.tilemap('map', 'assets/images/sky.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('sky', 'assets/images/sky.png');
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
@@ -29,35 +27,27 @@ function preload() {
 function create() {
 	game.stage.backgroundColor = "#3ed8fb";
 	game.physics.startSystem(Phaser.Physics.ARCADE);
-	map = game.add.tilemap('map');
-	map.addTilesetImage('sky');
-	map.addTilesetImage('ground');
-	layer = map.createLayer('Tile Layer 1');
-	layer_ground = map.createLayer('ground');
-	layer.resizeWorld();
 	game.physics.arcade.gravity.y = 654;
-	game.world.setBounds(0, 0, 8500, 3600);
-	//background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
-	//background.autoScroll(10,0);
+	game.world.setBounds(0, 0, 9600, 3600);
+	background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
+	background.autoScroll(10,0);
 	setLight();
 	runway[0] = game.add.tileSprite(0, 3180, 1650, 840, 'runway');
 	runway[0].scale.set(1,0.5);
 	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
 	runway[1].scale.set(1,0.5);
-	//ground = game.add.tileSprite(0, 1800, 8500, 3600, 'ground');
-	//ground.scale.set(1,0.5);
+	ground = game.add.tileSprite(2780, 3395, 6845, 205, 'ground');
 	game.physics.enable(runway,Phaser.Physics.ARCADE);
-	//game.physics.enable(ground,Phaser.Physics.ARCADE);
+	game.physics.enable(ground,Phaser.Physics.ARCADE);
 	runway[0].body.immovable = true;
 	runway[0].body.moves = false;
 	runway[1].body.immovable = true;
 	runway[1].body.moves = false;
-	//ground.body.immovable = true;
-	//ground.body.moves = false;
+	ground.body.immovable = true;
+	ground.body.moves = false;
 	runway[0].body.setSize(1650,20,0,730);
 	runway[1].body.setSize(1650,20,0,730);
-	runway[1].body.setSize(1650,20,0,730);
-	//ground.body.setSize(1650,20,0,730);
+	ground.body.setSize(6845,20,0,150);
 	setAudience();
 	setPlayer();
 	cursors = game.input.keyboard.createCursorKeys();
@@ -120,7 +110,7 @@ function setPlayer(){
 
 function update() {
 	game.physics.arcade.collide(player, runway);
-	//game.physics.arcade.collide(player, ground);
+	game.physics.arcade.collide(player, ground);
 	if (cursors.right.isDown){
 		acc = true;
 	}
@@ -130,7 +120,7 @@ function update() {
 	if (cursors.right.isUp && acc)
     {
 		player.body.drag.x = 0;
-        player.body.acceleration.set(600,0);
+        player.body.acceleration.set(800,0);
         setTimeout("player.body.acceleration.set(0);", 100 );
         acc = false;
     }
