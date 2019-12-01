@@ -25,8 +25,8 @@ function create() {
 	game.stage.backgroundColor = "#3ed8fb";
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.physics.arcade.gravity.y = 654;
-	game.world.setBounds(0, 0, 8500, 3600);
-	background = game.add.tileSprite(0, 0, 8500, 3600, 'sky');
+	game.world.setBounds(0, 0, 9640, 3600);
+	background = game.add.tileSprite(0, 0, 9640, 3600, 'sky');
 	background.scale.set(10);
 	background.autoScroll(10,0);
 	setLight();
@@ -34,7 +34,7 @@ function create() {
 	runway[0].scale.set(1,0.5);
 	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
 	runway[1].scale.set(1,0.5);
-	ground = game.add.tileSprite(1640, 3453, 6860, 295, 'ground');
+	ground = game.add.tileSprite(2780, 3453, 6860, 295, 'ground');
 	ground.scale.set(1,0.5);
 	game.physics.enable(runway,Phaser.Physics.ARCADE);
 	game.physics.enable(ground,Phaser.Physics.ARCADE);
