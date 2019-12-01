@@ -5,17 +5,15 @@ var runway = new Array(2);
 var audienceSeat = new Array(3);
 var player;
 var javelin;
-var cursors;
 var ground;
-var acc;
-var map;
-var tileset;
-var layer;
 var ac_ani;
 var ms_ani;
 var th_ani;
+var cursors;
 var space_key;
 var hasThrown = false;
+var hitGround = false;
+var hasFoul = false;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -57,9 +55,10 @@ function create() {
 	ground.body.setSize(6845,20,0,150);
 	setAudience();
 	setPlayer();
-	javelin = game.add.sprite(2780,3395,'javelin');
+	javelin = game.add.sprite(player.body.x-100,player.body.y+120,'javelin');
+	javelin.anchor.x = 0.9;
+	javelin.anchor.y = 0.5;
 	game.physics.enable(javelin,Phaser.Physics.ARCADE);
-	javelin.body.setSize(278,10,0,0);
 	javelin.body.allowGravity = false;
 	cursors = game.input.keyboard.createCursorKeys();
 	space_key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -122,13 +121,22 @@ function setPlayer(){
 	player.body.maxVelocity.set(800);
 }
 
+var acc = false;
+var isUp =false;
 
 function update() {
 	game.physics.arcade.collide(player, runway);
 	game.physics.arcade.collide(player, ground);
 	game.physics.arcade.collide(javelin, ground);
-	if(javelin.y == 3535){
+	if(javelin.body.y >= 3500 && !hitGround){
+		hitGround = true;
+		javelin.body.allowGravity = false;
 		javelin.body.velocity.set(0);
+		hasFoul = checkFoul();
+		if (hasFoul){
+			game.camera.follow(player,null,0.1,0.1);
+		}
+		console.log(javelin.body.x);
 	}
 	if (!hasThrown && cursors.right.isDown){
 		acc = true;
@@ -140,10 +148,13 @@ function update() {
     {
 		player.body.drag.x = 0;
         player.body.acceleration.set(1000,0);
-        setTimeout("player.body.acceleration.set(0);", 200 );
+        setTimeout("player.body.acceleration.set(0);", 100 );
         acc = false;
     }
 	if(player.body.velocity.x<2){
+		if(!isUp){
+			keepUp("slow");
+		}
 		if(!player.animations.paused){
 			player.animations.paused = true;
 		}
@@ -151,21 +162,50 @@ function update() {
 		if(player.animations.paused){
 			player.animations.paused = false;
 		}
-		ac_ani.speed = Math.floor(player.body.velocity.x/50);
+		if(!isUp){
+			keepUp("slow");
+			ac_ani.speed = Math.floor(player.body.velocity.x/50);
+		}else{
+			keepUp("fast");
+		}
 	}else if(!hasThrown){
 			player.animations.play('ms',ac_ani.speed);
+			isUp = true;
+			keepUp("fast");
 			ms_ani.speed = Math.floor(player.body.velocity.x/50);
 			if(space_key.isDown){
 				dartJavelin();
 			}
+	}
+	if(hasThrown && !hitGround){
+		keepDirection();
+	}
+}
+
+function keepUp(a){
+	if(a == "slow" && !hasThrown){
+		javelin.body.x = player.body.x-100;
+		javelin.body.y = player.body.y+120;
+	}else if (a == "fast" && !hasThrown){
+		javelin.body.x = player.body.x-100;
+		javelin.body.y = player.body.y+55;
 	}
 }
 
 function dartJavelin(){
 	player.animations.play('th');
 	hasThrown = true;
-	game.camera.follow(javelin);
+	hasFoul = checkFoul();
+	if(!hasFoul){
+		game.camera.follow(javelin);
+	}
 	fly(player.body.velocity.x);
+}
+function checkFoul(){
+	if(player.body.x>=2680){
+		return true;
+	}
+	return false;
 }
 
 function fly(vi){
@@ -173,11 +213,17 @@ function fly(vi){
 	javelin.body.drag.x = 100;
 	var randomAngle = Math.floor(Math.random()*90)*(Math.PI/180);
 	var randomForceMagnitude = Math.random();	
-	javelin.body.velocity.set(vi+2133*randomForceMagnitude*Math.cos(randomAngle),-2133*randomForceMagnitude*Math.sin(randomAngle));
+	javelin.body.velocity.set(800+1650*randomForceMagnitude*Math.cos(randomAngle),-1650*randomForceMagnitude*Math.sin(randomAngle));
+}
+
+function keepDirection(){
+	var turnAngle;
+	if(javelin.body.velocity.x>0){
+		turnAngle = Math.atan(javelin.body.velocity.y/javelin.body.velocity.x)*(180/Math.PI);
+		javelin.angle = turnAngle;
+	}
 }
 
 function render() {
-	game.debug.cameraInfo(game.camera, 32, 32);
-	game.debug.body(ground,'rgba(255,0,0,0.6)',true);
 }
 
