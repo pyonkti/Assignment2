@@ -243,6 +243,7 @@ function dartJavelin(){
 	}
 	fly(player.body.velocity.x);
 }
+
 function checkFoul(){
 	if(player.body.x>=2680){
 		return true;
@@ -253,7 +254,7 @@ function checkFoul(){
 var tempSpeed;
 function fly(vi){
 	tempSpeed = player.body.velocity.x;
-	player.body.velocity.set(0,0);
+	player.body.velocity.set(0);
 	magnitude.body.x = player.body.x+550;
 	magnitude.body.y = player.body.y-300;
 	magnitude.alpha = 1;
@@ -261,11 +262,12 @@ function fly(vi){
 	bar[0].body.x = player.body.x+573;
 	bar[0].body.y = player.body.y+200;
 	bar[0].body.acceleration.set(0,-800);
-	setTimeout("wait()", 2000);
+	space_key.onDown.add(moveOn);
 }
 
-function wait(){
-	//bar[0].body.velocity.set(0);
+function moveOn(){
+	bar[0].body.velocity.set(0);
+	bar[0].body.acceleration.set(0);
 	player.animations.paused = false;
 	player.body.velocity.set(tempSpeed,0);
 	javelin.body.allowGravity = true;
