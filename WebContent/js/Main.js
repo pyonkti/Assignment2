@@ -28,6 +28,8 @@ function preload() {
     game.load.image('audience_seat', 'assets/images/audience_seat.png');
     game.load.image('runway', 'assets/images/runway.png');
     game.load.image('light', 'assets/images/light.png');
+    game.load.image('light2', 'assets/images/light2.png');
+    game.load.image('light3', 'assets/images/light3.png');
     game.load.image('ground', 'assets/images/ground.png');
 }
 
@@ -41,9 +43,9 @@ function create() {
 	background.autoScroll(10,0);
 	runway[0] = game.add.tileSprite(0, 3180, 1650, 840, 'runway');
 	runway[0].scale.set(1,0.5);
-	runway[1] = game.add.tileSprite(1130, 3180, 1650, 840, 'runway');
+	runway[1] = game.add.tileSprite(1145, 3180, 1650, 840, 'runway');
 	runway[1].scale.set(1,0.5);
-	ground = game.add.tileSprite(2780, 3395, 6845, 205, 'ground');
+	ground = game.add.tileSprite(2795, 3395, 6845, 205, 'ground');
 	game.physics.enable(runway,Phaser.Physics.ARCADE);
 	game.physics.enable(ground,Phaser.Physics.ARCADE);
 	runway[0].body.immovable = true;
@@ -108,10 +110,21 @@ function setLight(){
 	    {
 	    	for(var j=0;j<5;j++)
 	    	{
-	    		var randomAd = Math.floor(Math.random()*10)%2;
-//	    		var randomFr = Math.floor(Math.random()*3);
+	    		var randomAd = Math.floor(Math.random()*10)%5;
 	    		if (randomAd == 0){
 	    			light= game.add.sprite(850*k+420+64 * j+32*i, 3035 + 80* (i+1),'light');   
+		    		light.scale.set(5);
+		    		var fade = game.add.tween(light);
+		    		fade.to({alpha:0},2000,"Linear",true);
+	    		}
+	    		if (randomAd == 1){
+	    			light= game.add.sprite(850*k+420+64 * j+32*i, 3035 + 80* (i+1),'light2');   
+		    		light.scale.set(5);
+		    		var fade = game.add.tween(light);
+		    		fade.to({alpha:0},2000,"Linear",true);
+	    		}	
+	    		if (randomAd == 2){
+	    			light= game.add.sprite(850*k+420+64 * j+32*i, 3035 + 80* (i+1),'light3');   
 		    		light.scale.set(5);
 		    		var fade = game.add.tween(light);
 		    		fade.to({alpha:0},2000,"Linear",true);
@@ -121,11 +134,6 @@ function setLight(){
 	}
 	fade.delay(5000);
 	fade.onComplete.addOnce(setLight);
-	
-////	light = game.add.sprite(420,3100,'light');
-////	light.scale.set(5,5);
-////	var fade = game.add.tween(light);
-////	fade.to({alpha:0},2000,"Linear",true);
 }
 
 function setPlayer(){
