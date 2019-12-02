@@ -168,7 +168,7 @@ function update() {
 		if(!player.animations.paused){
 			player.animations.paused = true;
 		}
-	}else if (player.body.velocity.x<750){
+	}else if (player.body.velocity.x<500){
 		if(player.animations.paused){
 			player.animations.paused = false;
 		}
