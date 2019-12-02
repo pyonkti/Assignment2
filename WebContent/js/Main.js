@@ -16,6 +16,7 @@ var bar = new Array(2);
 var hasThrown = false;
 var hitGround = false;
 var hasFoul = false;
+var exists = false;
 
 function preload() {
     game.load.spritesheet('white_audience', 'assets/images/audience_white_sprite.png', 24,32);
@@ -65,17 +66,6 @@ function create() {
 	setLight();
 	game.physics.enable(javelin,Phaser.Physics.ARCADE);
 	javelin.body.allowGravity = false;
-	magnitude = game.add.sprite(player.body.x+1000,player.body.y-300,'magnitude');
-	bar[0] = game.add.sprite(player.body.x+1023,player.body.y-300,'bar');
-	game.physics.enable(magnitude,Phaser.Physics.ARCADE);
-	game.physics.enable(bar[0],Phaser.Physics.ARCADE);
-	bar[0].body.allowGravity = false;
-	magnitude.body.allowGravity = false;
-	magnitude.body.setSize(25,25,0,-25);
-	magnitude.body.immovable = true;
-	bar[0].body.bounce.set(1);
-	magnitude.alpha = 0;
-	bar[0].alpha = 0;
 	cursors = game.input.keyboard.createCursorKeys();
 	space_key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	game.camera.follow(player);
@@ -165,7 +155,9 @@ function update() {
 	game.physics.arcade.collide(player, runway);
 	game.physics.arcade.collide(player, ground);
 	game.physics.arcade.collide(javelin, ground);
-	game.physics.arcade.collide(magnitude, bar[0]);
+	if(exists){
+		game.physics.arcade.collide(magnitude, bar[0]);
+	}
 	if(javelin.body.y >= 3500 && !hitGround){
 		hitGround = true;
 		javelin.body.allowGravity = false;
@@ -254,14 +246,18 @@ function checkFoul(){
 var tempSpeed;
 function fly(vi){
 	tempSpeed = player.body.velocity.x;
+	magnitude = game.add.sprite(player.body.x+550,player.body.y-300,'magnitude');
+	bar[0] = game.add.sprite(player.body.x+573,player.body.y+200,'bar');
+	game.physics.enable(magnitude,Phaser.Physics.ARCADE);
+	game.physics.enable(bar[0],Phaser.Physics.ARCADE);
+	bar[0].body.allowGravity = false;
+	magnitude.body.allowGravity = false;
+	magnitude.body.setSize(25,25,0,-25);
+	magnitude.body.immovable = true;
+	bar[0].body.bounce.set(1);
 	player.body.velocity.set(0);
-	magnitude.body.x = player.body.x+550;
-	magnitude.body.y = player.body.y-300;
-	magnitude.alpha = 1;
-	bar[0].alpha = 1;
-	bar[0].body.x = player.body.x+573;
-	bar[0].body.y = player.body.y+200;
 	bar[0].body.acceleration.set(0,-800);
+	exists = true;
 	space_key.onDown.add(moveOn);
 }
 
@@ -288,7 +284,5 @@ function keepDirection(){
 }
 
 function render() {
-	game.debug.cameraInfo(game.camera,32,32);
-	game.debug.spriteInfo(magnitude,500,32);
 }
 
