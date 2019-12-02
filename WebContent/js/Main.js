@@ -11,6 +11,8 @@ var ms_ani;
 var th_ani;
 var cursors;
 var space_key;
+var magnitude;
+var bar = new Array(2);
 var hasThrown = false;
 var hitGround = false;
 var hasFoul = false;
@@ -27,6 +29,8 @@ function preload() {
     game.load.image('runway', 'assets/images/runway.png');
     game.load.image('light', 'assets/images/light.png');
     game.load.image('ground', 'assets/images/ground.png');
+    game.load.image('magnitude', 'assets/images/magnitude.png');
+    game.load.image('bar', 'assets/images/bar.png');
 }
 
 function create() {
@@ -61,6 +65,17 @@ function create() {
 	setLight();
 	game.physics.enable(javelin,Phaser.Physics.ARCADE);
 	javelin.body.allowGravity = false;
+	magnitude = game.add.sprite(player.body.x+1000,player.body.y-300,'magnitude');
+	bar[0] = game.add.sprite(player.body.x+1023,player.body.y-300,'bar');
+	game.physics.enable(magnitude,Phaser.Physics.ARCADE);
+	game.physics.enable(bar[0],Phaser.Physics.ARCADE);
+	bar[0].body.allowGravity = false;
+	magnitude.body.allowGravity = false;
+	magnitude.body.setSize(25,25,0,-25);
+	magnitude.body.immovable = true;
+	bar[0].body.bounce.set(1);
+	magnitude.alpha = 0;
+	bar[0].alpha = 0;
 	cursors = game.input.keyboard.createCursorKeys();
 	space_key = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	game.camera.follow(player);
@@ -143,12 +158,14 @@ function setPlayer(){
 }
 
 var acc = false;
+var acc2 = false;
 var isUp =false;
 
 function update() {
 	game.physics.arcade.collide(player, runway);
 	game.physics.arcade.collide(player, ground);
 	game.physics.arcade.collide(javelin, ground);
+	game.physics.arcade.collide(magnitude, bar[0]);
 	if(javelin.body.y >= 3500 && !hitGround){
 		hitGround = true;
 		javelin.body.allowGravity = false;
@@ -179,7 +196,7 @@ function update() {
 		if(!player.animations.paused){
 			player.animations.paused = true;
 		}
-	}else if (player.body.velocity.x<750){
+	}else if (player.body.velocity.x<650){
 		if(player.animations.paused){
 			player.animations.paused = false;
 		}
@@ -195,7 +212,11 @@ function update() {
 			keepUp("fast");
 			ms_ani.speed = Math.floor(player.body.velocity.x/50);
 			if(space_key.isDown){
+				acc2 = true;
+			}
+			if(space_key.isUp && acc2){
 				dartJavelin();
+				acc2 = false;
 			}
 	}
 	if(hasThrown && !hitGround){
@@ -215,7 +236,7 @@ function keepUp(a){
 
 function dartJavelin(){
 	player.animations.play('th');
-	hasThrown = true;
+	player.animations.paused = true;
 	hasFoul = checkFoul();
 	if(!hasFoul){
 		game.camera.follow(javelin);
@@ -229,13 +250,32 @@ function checkFoul(){
 	return false;
 }
 
+var tempSpeed;
 function fly(vi){
+	tempSpeed = player.body.velocity.x;
+	player.body.velocity.set(0,0);
+	magnitude.body.x = player.body.x+550;
+	magnitude.body.y = player.body.y-300;
+	magnitude.alpha = 1;
+	bar[0].alpha = 1;
+	bar[0].body.x = player.body.x+573;
+	bar[0].body.y = player.body.y+200;
+	bar[0].body.acceleration.set(0,-800);
+	setTimeout("wait()", 2000);
+}
+
+function wait(){
+	//bar[0].body.velocity.set(0);
+	player.animations.paused = false;
+	player.body.velocity.set(tempSpeed,0);
 	javelin.body.allowGravity = true;
 	javelin.body.drag.x = 100;
-	var randomAngle = Math.floor(Math.random()*90)*(Math.PI/180);
-	var randomForceMagnitude = Math.random();	
-	javelin.body.velocity.set(800+1650*randomForceMagnitude*Math.cos(randomAngle),-1650*randomForceMagnitude*Math.sin(randomAngle));
+	var randomAngle = 46*(Math.PI/180);
+	var ForceMagnitude = 1-(bar[0].y-magnitude.y)/500;	
+	javelin.body.velocity.set(800+1650*ForceMagnitude*Math.cos(randomAngle),-1650*ForceMagnitude*Math.sin(randomAngle));
+	hasThrown = true;
 }
+
 
 function keepDirection(){
 	var turnAngle;
@@ -246,5 +286,7 @@ function keepDirection(){
 }
 
 function render() {
+	game.debug.cameraInfo(game.camera,32,32);
+	game.debug.spriteInfo(magnitude,500,32);
 }
 
