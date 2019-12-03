@@ -12,6 +12,7 @@ var th_ani;
 var cursors;
 var space_key;
 var magnitude;
+var angle;
 var bar = new Array(2);
 var hasThrown = false;
 var hitGround = false;
@@ -31,7 +32,9 @@ function preload() {
     game.load.image('light', 'assets/images/light.png');
     game.load.image('ground', 'assets/images/ground.png');
     game.load.image('magnitude', 'assets/images/magnitude.png');
+    game.load.image('angle', 'assets/images/angle.png');
     game.load.image('bar', 'assets/images/bar.png');
+    game.load.image('bar2', 'assets/images/bar2.png');
 }
 
 function create() {
@@ -211,6 +214,13 @@ function update() {
 				acc2 = false;
 			}
 	}
+	if(bar1_exist){
+		if(bar[1].angle >= 0){
+			bar[1].body.angularVelocity = -200;
+		}else if(bar[1].angle <= -90){
+			bar[1].body.angularVelocity = 200;
+		}
+	}
 	if(hasThrown && !hitGround){
 		keepDirection();
 	}
@@ -247,31 +257,55 @@ var tempSpeed;
 function fly(vi){
 	tempSpeed = player.body.velocity.x;
 	magnitude = game.add.sprite(player.body.x+550,player.body.y-300,'magnitude');
+	angle = game.add.sprite(player.body.x+100,player.body.y-90,'angle');
+	angle.scale.set(3);
 	bar[0] = game.add.sprite(player.body.x+573,player.body.y+200,'bar');
+	bar[1] = game.add.sprite(player.body.x+100,player.body.y+56,'bar2');
 	game.physics.enable(magnitude,Phaser.Physics.ARCADE);
 	game.physics.enable(bar[0],Phaser.Physics.ARCADE);
+	game.physics.enable(bar[1],Phaser.Physics.ARCADE);
 	bar[0].body.allowGravity = false;
+	bar[1].body.allowGravity = false;
+	bar[1].anchor.setTo(0.5);
 	magnitude.body.allowGravity = false;
 	magnitude.body.setSize(25,25,0,-25);
 	magnitude.body.immovable = true;
 	bar[0].body.bounce.set(1);
 	player.body.velocity.set(0);
-	bar[0].body.acceleration.set(0,-800);
+	bar[0].body.acceleration.set(0,-1600);
 	exists = true;
+	hasThrown = true;
 	space_key.onDown.add(moveOn);
 }
 
+var decision_1 = false;
+var bar1_exist = false;
 function moveOn(){
-	bar[0].body.velocity.set(0);
-	bar[0].body.acceleration.set(0);
-	player.animations.paused = false;
-	player.body.velocity.set(tempSpeed,0);
-	javelin.body.allowGravity = true;
-	javelin.body.drag.x = 100;
-	var randomAngle = 46*(Math.PI/180);
-	var ForceMagnitude = 1-(bar[0].y-magnitude.y)/500;	
-	javelin.body.velocity.set(800+1650*ForceMagnitude*Math.cos(randomAngle),-1650*ForceMagnitude*Math.sin(randomAngle));
-	hasThrown = true;
+	if(!decision_1){
+		bar[0].body.velocity.set(0);
+		bar[0].body.acceleration.set(0);
+		bar1_exist = true;
+		space_key.onDown.add(moveOn_2);
+		decision_1 = true;
+	}
+}
+
+var decision_2 = false;
+function moveOn_2(){
+	if(!decision_2){
+		bar[0].destroy();
+		bar[1].destroy();
+		magnitude.destroy();
+		angle.destroy();
+		player.animations.paused = false;
+		player.body.velocity.set(tempSpeed,0);
+		javelin.body.allowGravity = true;
+		javelin.body.drag.x = 100;
+		var setAngle = -bar[1].angle*(Math.PI/180);
+		var forceMagnitude = 1-(bar[0].y-magnitude.y)/500;	
+		javelin.body.velocity.set(800+1650*forceMagnitude*Math.cos(setAngle),-1650*forceMagnitude*Math.sin(setAngle));
+		decision_2 = true;
+	}
 }
 
 
