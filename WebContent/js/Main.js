@@ -169,7 +169,6 @@ function update() {
 		if (hasFoul){
 			game.camera.follow(player,null,0.1,0.1);
 		}
-		console.log(javelin.body.x);
 	}
 	if (!hasThrown && cursors.right.isDown){
 		acc = true;
@@ -177,7 +176,7 @@ function update() {
 	else if(cursors.right.isUp && !acc){
 		player.body.drag.x = 1000;
 	}
-	else if (cursors.right.isUp && acc && !hasThrown)
+	else if (cursors.right.isUp && acc && !hasThrown && !checkFoul())
     {
 		player.body.drag.x = 0;
         player.body.acceleration.set(1000,0);
@@ -209,10 +208,13 @@ function update() {
 			if(space_key.isDown){
 				acc2 = true;
 			}
-			if(space_key.isUp && acc2){
+			if(space_key.isUp && acc2 && !checkFoul()){
 				dartJavelin();
 				acc2 = false;
 			}
+	}
+	if(checkFoul()){
+		keepUp("fast");
 	}
 	if(bar1_exist){
 		if(bar[1].angle >= 0){
@@ -297,6 +299,7 @@ function moveOn_2(){
 		bar[1].destroy();
 		magnitude.destroy();
 		angle.destroy();
+		bar1_exist = false;
 		player.animations.paused = false;
 		player.body.velocity.set(tempSpeed,0);
 		javelin.body.allowGravity = true;
