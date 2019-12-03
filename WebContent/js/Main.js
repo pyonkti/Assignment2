@@ -306,7 +306,7 @@ function moveOn_2(){
 		javelin.body.drag.x = 100;
 		var setAngle = -bar[1].angle*(Math.PI/180);
 		var forceMagnitude = 1-(bar[0].y-magnitude.y)/500;	
-		javelin.body.velocity.set(800+1650*forceMagnitude*Math.cos(setAngle),-1650*forceMagnitude*Math.sin(setAngle));
+		javelin.body.velocity.set(tempSpeed+1650*forceMagnitude*Math.cos(setAngle),-1650*forceMagnitude*Math.sin(setAngle));
 		decision_2 = true;
 	}
 }
