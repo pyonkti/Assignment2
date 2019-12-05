@@ -1,0 +1,155 @@
+{
+  "boot": [{
+    "type": "image",
+    "key": "logo",
+    "url": "assets/loading/logo.png",
+    "overwrite": false
+  }],
+  "preloader": [
+    {
+      "type": "image",
+      "key": "sky",
+      "url": "assets/images/sky.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "angle",
+      "url": "assets/images/angle.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "audience_seat",
+      "url": "assets/images/audience_seat.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "bar",
+      "url": "assets/images/bar.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "bar2",
+      "url": "assets/images/bar2.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "ground",
+      "url": "assets/images/ground.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "javelin",
+      "url": "assets/images/javelin.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "light",
+      "url": "assets/images/light.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "magnitude",
+      "url": "assets/images/magnitude.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "runway",
+      "url": "assets/images/runway.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "credits-text",
+      "url": "assets/images/credits-text.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "press-enter-text",
+      "url": "assets/images/press-enter-text.png",
+      "overwrite": false
+    },
+    {
+      "type": "image",
+      "key": "title",
+      "url": "assets/images/title-screen.png",
+      "overwrite": false
+    },
+    {
+      "type": "spritesheet",
+      "key": "purple_audience",
+      "url": "assets/images/audience_purple_sprite.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "frameMax": -1,
+      "margin": 0,
+      "spacing": 0
+    },
+    {
+      "type": "spritesheet",
+      "key": "red_audience",
+      "url": "assets/images/audience_red_sprite.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "frameMax": -1,
+      "margin": 0,
+      "spacing": 0
+    },
+    {
+      "type": "spritesheet",
+      "key": "white_audience",
+      "url": "assets/images/audience_white_sprite.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "frameMax": -1,
+      "margin": 0,
+      "spacing": 0
+    },
+    {
+      "type": "spritesheet",
+      "key": "yellow_audience",
+      "url": "assets/images/audience_yellow_sprite.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "frameMax": -1,
+      "margin": 0,
+      "spacing": 0
+    },
+    {
+      "type": "spritesheet",
+      "key": "player",
+      "url": "assets/images/res_viewer_sprite.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "frameMax": -1,
+      "margin": 0,
+      "spacing": 0
+    },
+    {
+      "type": "script",
+      "key": "TitleScreen",
+      "url": "assets/canvas/TitleScreen.js"
+    },
+    {
+      "type": "script",
+      "key": "Player",
+      "url": "assets/canvas/prefabs/Player.js"
+    }
+  ],
+  "meta": {
+    "generated": "1575566573450",
+    "app": "Phaser Editor",
+    "url": "http://phasereditor.boniatillo.com",
+    "version": "1.0",
+    "copyright": "Arian Fornaris (c) 2015,2016"
+  }
+}
