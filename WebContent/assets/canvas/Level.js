@@ -88,44 +88,29 @@ Level.prototype.create = function() {
 	    	}
 	    }
 	}
-	var player = this.add.sprite(100, 3350,'player'); 
-	var ac_ani = player.animations.add('accelerate',[0,1,2],30,true);
-	var ms_ani = player.animations.add('ms',[3,4,5],30,true);
-	var th_ani = player.animations.add('th',[6,7,8,9,10,11,12,13],30,false);
-	player.animations.play('accelerate');
-	player.animations.paused = true;
-	this.physics.enable(player,Phaser.Physics.ARCADE);
-	player.scale.set(6);
-	player.body.allowGravity = true;
-	player.body.bounce.setTo(0.1);
-	player.body.collideWorldBounds = true;
-	player.body.maxVelocity.set(800);
-	var javelin = this.add.sprite(player.body.x+180,player.body.y+130,'javelin');
-	javelin.anchor.x = 0.9;
-	javelin.anchor.y = 0.5;
-	this.physics.enable(javelin,Phaser.Physics.ARCADE);
-	javelin.body.allowGravity = false;
+	var player = new Player(this.game,100,3450);
+
+	var javelin = new Javelin(this.game,player.x,player.y);
+	
 	cursors = this.input.keyboard.createCursorKeys();
 	space_key = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	
+	this.decelerate = function(){player.body.acceleration.set(0);};
 	this.camera.follow(player);
-
+	
 	this.fBackground = background;
 	this.fRunway0 = runway[0];
 	this.fRunway1 = runway[1];
 	this.fGround = ground;
 	this.fPlayer = player;
 	this.fJavelin = javelin;
-
-	this.afterCreate();
-
+	this.fCursors = cursors;
+	this.fSpace_key = space_key;
 };
 
 /* --- end generated code --- */
 
-Level.prototype.afterCreate = function() {
-	
-};
-
+/*
 Level.prototype.startMusic = function() {
 	this.music = this.add.audio("music");
 	this.music.loop = true;
@@ -145,82 +130,92 @@ Level.prototype.addAudios = function() {
 Level.prototype.createTileMap = function() {
 	
 };
+*/
+var hitGround = false;
+var hasFoul = false;
+var exists = false;
+var acc = false;
+var acc2 = false;
+var isUp =false;
 
 Level.prototype.update = function() {
-
+	
 	this.physics.arcade.collide(this.fGround,this.fPlayer);
 	this.physics.arcade.collide(this.fGround,this.fJavelin);
 	this.physics.arcade.collide(this.fRunway0, this.fPlayer);
 	this.physics.arcade.collide(this.fRunway1, this.fPlayer);
 	this.physics.arcade.collide(this.fRunway0, this.fJavelin);
 	this.physics.arcade.collide(this.fRunway1, this.fJavelin);
-
 	
+	if(this.fPlayer.body.velocity.x<2){
+		StateIdle.play(this.fPlayer);	
+	}
+	
+	if(this.fPlayer.state.StateName == "Idle" && this.fPlayer.body.velocity.x>2){
+		this.fPlayer.state = StateAccelerate;
+		StateAccelerate.play(this.fPlayer);
+	}
+	else if(this.fPlayer.state.StateName == "Idle"){ 
+		this.keepUp("slow");
+	}
+	if(this.fPlayer.state.StateName == "Accelerating" && this.fPlayer.body.velocity.x<2){
+		this.fPlayer.state = StateIdle;
+		StateIdle.play(this.fPlayer);
+	}
+	else if(this.fPlayer.state.StateName == "Accelerating"){ 
+		this.fPlayer.ac_ani.speed = Math.floor(this.fPlayer.body.velocity.x/50);
+		this.keepUp("slow");
+	}
+	if(this.fPlayer.state.StateName == "Accelerating" && this.fPlayer.body.velocity.x>700){
+		this.fPlayer.state = StateMaxSpeed;
+		StateMaxSpeed.play(this.fPlayer);
+	}
+	if(this.fPlayer.state.StateName == "MaxSpeed" && this.fPlayer.body.velocity.x<650){
+		this.fPlayer.state = StateAccelerate;
+		StateAccelerate.play(this.fPlayer);
+	}
+	if(this.fPlayer.state.StateName == "MaxSpeed"){ 
+		this.fPlayer.ms_ani.speed = Math.floor(this.fPlayer.body.velocity.x/50);
+		this.keepUp("fast");
+	}
+	this.movePlayer();
+};
 
-	//this.movePlayer();
+
+Level.prototype.movePlayer = function() {
+	if (!this.fPlayer.hasThrown && this.fCursors.right.isDown){
+		acc = true;
+	}
+	else if(this.fCursors.right.isUp && !acc){
+		this.fPlayer.body.drag.x = 1000;
+	}
+	else if (this.fCursors.right.isUp && acc && !this.fPlayer.hasThrown && !this.checkFoul())
+    {
+		this.fPlayer.body.drag.x = 0;
+		this.fPlayer.body.acceleration.set(1000,0);
+        setTimeout(this.decelerate, 100);
+        acc = false;
+    }
+};
+
+Level.prototype.keepUp = function(a){
+	if(a == "slow"){
+		this.fJavelin.body.x = this.fPlayer.body.x-100;
+		this.fJavelin.body.y = this.fPlayer.body.y+120;
+	}else if (a == "fast" && !this.fPlayer.hasThrown){
+		this.fJavelin.body.x = this.fPlayer.body.x-100;
+		this.fJavelin.body.y = this.fPlayer.body.y+55;
+	}
+}
+
+Level.prototype.checkFoul= function() {
+	if(this.fPlayer.body.x>=2680){
+		return true;
+	}
+	return false;
 };
 
 /*
-Level.prototype.movePlayer = function() {
-	if (!this.fPlayer.alive) {
-		this.fPlayer.animations.play("hurt");
-		return;
-	}
-
-	if (this.fPlayer.hurtFlag) {
-		this.fPlayer.animations.play("hurt");
-		return;
-	}
-
-	if (this.fPlayer.onLadder) {
-		this.fPlayer.animations.play("climb");
-
-		var vel = 30;
-		if (this.wasd.duck.isDown) {
-			this.fPlayer.body.velocity.y = vel;
-		} else if (this.wasd.up.isDown) {
-			this.fPlayer.body.velocity.y = -vel;
-		}
-
-		// horizontal
-
-		if (this.wasd.left.isDown) {
-			this.fPlayer.body.velocity.x = -vel;
-
-			this.fPlayer.scale.x = -1;
-		} else if (this.wasd.right.isDown) {
-			this.fPlayer.body.velocity.x = vel;
-
-			this.fPlayer.scale.x = 1;
-		} else {
-			this.fPlayer.body.velocity.x = 0;
-
-		}
-
-		return;
-	}
-
-	if (this.wasd.jump.isDown && this.fPlayer.body.onFloor()) {
-		this.fPlayer.body.velocity.y = -200;
-		this.audioJump.play();
-
-	}
-
-	var vel = 80;
-	if (this.wasd.left.isDown) {
-		this.fPlayer.body.velocity.x = -vel;
-		this.moveAnimation();
-		this.fPlayer.scale.x = -1;
-	} else if (this.wasd.right.isDown) {
-		this.fPlayer.body.velocity.x = vel;
-		this.moveAnimation();
-		this.fPlayer.scale.x = 1;
-	} else {
-		this.fPlayer.body.velocity.x = 0;
-		this.stillAnimation();
-
-	}
-};
 
 Level.prototype.moveAnimation = function() {
 	if (this.fPlayer.body.velocity.y < 0) {

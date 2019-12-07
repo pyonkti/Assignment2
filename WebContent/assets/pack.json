@@ -143,10 +143,15 @@
       "type": "script",
       "key": "Player",
       "url": "assets/canvas/prefabs/Player.js"
+    },
+    {
+      "type": "script",
+      "key": "Javelin",
+      "url": "assets/canvas/prefabs/Javelin.js"
     }
   ],
   "meta": {
-    "generated": "1575566573450",
+    "generated": "1575736692907",
     "app": "Phaser Editor",
     "url": "http://phasereditor.boniatillo.com",
     "version": "1.0",

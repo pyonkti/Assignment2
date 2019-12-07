@@ -33,11 +33,12 @@ Preloader.prototype.preload = function () {
 	this.load.pack('preloader', 'assets/pack.json');
 	
 	
-	var _logo1 = this.add.sprite(108.0, 35.0, 'logo');
+	var _logo1 = this.add.sprite(420.0, 85.0, 'logo');
+	_logo1.scale.set(3);
 	_logo1.tint = 0x808000;
 	
-	var _logo = this.add.sprite(108.0, 33.0, 'logo');
-	
+	var _logo = this.add.sprite(420.0, 83.0, 'logo');
+	_logo.scale.set(3);
 	
 	
 	this.load.setPreloadSprite(_logo, 0);
