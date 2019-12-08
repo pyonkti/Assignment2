@@ -21,7 +21,6 @@ Preloader.prototype = Preloader_proto;
 Preloader.prototype.constructor = Preloader;
 
 Preloader.prototype.init = function () {
-	
 	this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 	this.scale.pageAlignHorizontally = true;
 	this.scale.pageAlignVertically = true;
@@ -47,7 +46,6 @@ Preloader.prototype.preload = function () {
 
 Preloader.prototype.create = function () {
 	this.afterCreate();
-	
 };
 
 /* --- end generated code --- */

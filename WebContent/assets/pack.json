@@ -183,10 +183,40 @@
       "type": "script",
       "key": "YouFoul",
       "url": "assets/canvas/YouFoul.js"
+    },
+    {
+      "type": "audio",
+      "key": "die",
+      "urls": ["assets/sound/Sekiro Death Sound Effect.mp3"],
+      "autoDecode": true
+    },
+    {
+      "type": "audio",
+      "key": "level_BGM",
+      "urls": ["assets/sound/07 Dashing Event.mp3"],
+      "autoDecode": true
+    },
+    {
+      "type": "audio",
+      "key": "success",
+      "urls": ["assets/sound/13 Event Success.mp3"],
+      "autoDecode": true
+    },
+    {
+      "type": "audio",
+      "key": "failure",
+      "urls": ["assets/sound/12 Event Failure.mp3"],
+      "autoDecode": true
+    },
+    {
+      "type": "audio",
+      "key": "thunder",
+      "urls": ["assets/sound/rock_breaking.mp3"],
+      "autoDecode": true
     }
   ],
   "meta": {
-    "generated": "1575820027471",
+    "generated": "1575836223032",
     "app": "Phaser Editor",
     "url": "http://phasereditor.boniatillo.com",
     "version": "1.0",

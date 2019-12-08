@@ -38,8 +38,16 @@ YouFoul.prototype.create = function () {
 YouFoul.prototype.afterCreate = function() {
 	var startKey = this.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 	startKey.onDown.add(this.startGame, this);
+	this.startMusic();
 	//
 	this.time.events.loop(700, this.blinkText, this);
+};
+
+YouFoul.prototype.startMusic = function() {
+	this.music = this.add.audio("failure");
+	this.music.loop = false;
+
+	this.music.play();
 };
 
 YouFoul.prototype.startGame = function() {

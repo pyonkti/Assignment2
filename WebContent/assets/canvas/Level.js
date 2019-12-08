@@ -20,7 +20,9 @@ Level.prototype.init = function() {
 	txtIdleOnce = true;
 	txtThrowOnce = true;
 	this.physics.startSystem(Phaser.Physics.ARCADE);
-
+	this.bgm = this.add.audio("level_BGM");
+	this.bgm.loop = true;
+	this.bgm.play();
 };
 
 Level.prototype.preload = function() {
@@ -104,32 +106,9 @@ Level.prototype.create = function() {
 	this.fJavelin = javelin;
 	this.fCursors = cursors;
 	this.fSpace_key = space_key;
-	//this.fSpace_key.onDown.add(moveOn_2);};
 };
 
-/* --- end generated code --- */
 
-/*
-Level.prototype.startMusic = function() {
-	this.music = this.add.audio("music");
-	this.music.loop = true;
-
-	this.music.play();
-};
-
-Level.prototype.addAudios = function() {
-	this.audioCarrot = this.add.audio("carrot");
-	this.audioEnemyDeath = this.add.audio("enemy-death");
-	this.audioHurt = this.add.audio("hurt");
-	this.audioJump = this.add.audio("jump");
-	this.audioStar = this.add.audio("star");
-	this.audioChest = this.add.audio("chest");
-};
-
-Level.prototype.createTileMap = function() {
-	
-};
-*/
 var hitGround = false;
 var exists = false;
 var bar1_exists = false;
@@ -159,6 +138,9 @@ Level.prototype.update = function() {
 			this.flash();
 			this.fBackground.autoScroll(-100,0);
 			flashOnce = false;
+			this.bgm.destroy(false);
+			this.audioThunder = this.add.audio("thunder");
+			this.audioThunder.play();
 	}
 		var tempJavelin = this.fJavelin;
 		this.physics.arcade.overlap(this.fJavelin,this.fPlayer,function(){
@@ -379,9 +361,7 @@ Level.prototype.moveOn_2 = function(){
 	var forceMagnitude = 1-(bar_0.y-magnitude.y)/500;	
 	tempGame.fJavelin.body.velocity.set(tempSpeed+1650*forceMagnitude*Math.cos(setAngle),-1650*forceMagnitude*Math.sin(setAngle));
 	final_decision = true;
-	var randomEvent = Math.floor(Math.random()*4);
-	console.log(forceMagnitude);
-	console.log(randomEvent);
+	var randomEvent = Math.floor(Math.random()*4);	
 	if(randomEvent == 0 && -bar_1.angle>40 && forceMagnitude>0.8){
 		setTimeout(function(){isDead = true;}, 2000);
 	}

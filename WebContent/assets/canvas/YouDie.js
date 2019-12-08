@@ -40,8 +40,16 @@ YouDie.prototype.create = function () {
 YouDie.prototype.afterCreate = function() {
 	var startKey = this.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 	startKey.onDown.add(this.startGame, this);
+	this.startMusic();
 	//
 	this.time.events.loop(700, this.blinkText, this);
+};
+
+YouDie.prototype.startMusic = function() {
+	this.music = this.add.audio("die");
+	this.music.loop = false;
+
+	this.music.play();
 };
 
 YouDie.prototype.startGame = function() {

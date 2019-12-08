@@ -39,8 +39,16 @@ YourRecord.prototype.create = function () {
 YourRecord.prototype.afterCreate = function() {
 	var startKey = this.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 	startKey.onDown.add(this.startGame, this);
+	this.startMusic();
 	//
 	this.time.events.loop(700, this.blinkText, this);
+};
+
+YourRecord.prototype.startMusic = function() {
+	this.music = this.add.audio("success");
+	this.music.loop = false;
+
+	this.music.play();
 };
 
 YourRecord.prototype.startGame = function() {

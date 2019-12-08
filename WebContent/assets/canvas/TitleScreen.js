@@ -20,7 +20,6 @@ TitleScreen.prototype = TitleScreen_proto;
 TitleScreen.prototype.constructor = TitleScreen;
 
 TitleScreen.prototype.init = function () {
-	
 };
 
 TitleScreen.prototype.preload = function () {
@@ -40,13 +39,11 @@ TitleScreen.prototype.create = function () {
 	var pressEnter = this.add.sprite(500.0, 500.0, 'press-enter-text');
 	pressEnter.scale.set(3);
 	
-	
 	// public fields
 	
 	this.fBackground = background;
 	this.fPressEnter = pressEnter;
-	this.afterCreate();
-	
+	this.afterCreate();	
 };
 
 /* --- end generated code --- */
@@ -54,8 +51,7 @@ TitleScreen.prototype.create = function () {
 TitleScreen.prototype.afterCreate = function() {
 	var startKey = this.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 	startKey.onDown.add(this.startGame, this);
-	//
-	this.time.events.loop(700, this.blinkText, this);
+	this.time.events.loop(500, this.blinkText, this);
 };
 
 TitleScreen.prototype.startGame = function() {
