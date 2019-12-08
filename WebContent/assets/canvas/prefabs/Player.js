@@ -8,8 +8,9 @@ function Player(aGame, aX, aY) {
 	this.hasThrown = false;
 	this.state = StateIdle;
 
-	this.game.physics.arcade.enable(this);
+	this.game.physics.arcade.enable(this);	
 	this.scale.set(6);
+	this.body.setSize(24,32,10,0);
 	this.body.allowGravity = true;
 	this.body.maxVelocity.set(800);
 	this.afterCreate();
@@ -29,9 +30,13 @@ var StateAccelerate = new UState("Accelerating");
 	
 var StateMaxSpeed = new UState("MaxSpeed");
 	StateMaxSpeed.play = function(RefObject){
-		RefObject.animations.paused = false;
 		RefObject.animations.play('ms_animation');
 	};
+	
+var StateThrow = new UState("Throw");
+	StateThrow.play = function(RefObject){
+		RefObject.animations.play('th_animation');
+	};	
 	
 function UState(RefStateName) {
 	    this.StateName = RefStateName; 

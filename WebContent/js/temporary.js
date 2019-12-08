@@ -251,7 +251,7 @@ function checkFoul(){
 }
 
 var tempSpeed;
-function fly(vi){
+function fly(){
 	tempSpeed = player.body.velocity.x;
 	magnitude = game.add.sprite(player.body.x+550,player.body.y-300,'magnitude');
 	angle = game.add.sprite(player.body.x+100,player.body.y-90,'angle');

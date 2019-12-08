@@ -9,6 +9,7 @@ function Javelin(aGame, aX, aY) {
 	aGame.add.existing(this);
 }
 
+
 /** @type Phaser.Sprite */
 var Javelin_proto = Object.create(Phaser.Sprite.prototype);
 Javelin.prototype = Javelin_proto;

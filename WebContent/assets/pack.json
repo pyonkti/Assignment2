@@ -148,10 +148,30 @@
       "type": "script",
       "key": "Javelin",
       "url": "assets/canvas/prefabs/Javelin.js"
+    },
+    {
+      "type": "script",
+      "key": "Magnitude",
+      "url": "assets/canvas/prefabs/Magnitude.js"
+    },
+    {
+      "type": "script",
+      "key": "Angle",
+      "url": "assets/canvas/prefabs/Angle.js"
+    },
+    {
+      "type": "script",
+      "key": "Bar",
+      "url": "assets/canvas/prefabs/Bar.js"
+    },
+    {
+      "type": "script",
+      "key": "Bar2",
+      "url": "assets/canvas/prefabs/Bar2.js"
     }
   ],
   "meta": {
-    "generated": "1575736692907",
+    "generated": "1575754378645",
     "app": "Phaser Editor",
     "url": "http://phasereditor.boniatillo.com",
     "version": "1.0",

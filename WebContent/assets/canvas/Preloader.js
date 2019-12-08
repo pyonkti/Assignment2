@@ -57,6 +57,8 @@ Preloader.prototype.afterCreate = function () {
 	// all the assets are loaded, go to the menu screen
 	this.state.add("Level", Level);
 	this.state.add("TitleScreen", TitleScreen, true);
-	
+	this.state.add("YourRecord",YourRecord);
+	this.state.add("YouFoul",YouFoul);
+	this.state.add("YouDie",YouDie);
 	
 };
