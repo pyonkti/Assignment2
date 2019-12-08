@@ -17,6 +17,8 @@ Level.prototype.init = function() {
 	isUp = false;
 	isDead = false;
 	flashOnce = true;
+	txtIdleOnce = true;
+	txtThrowOnce = true;
 	this.physics.startSystem(Phaser.Physics.ARCADE);
 
 };
@@ -136,6 +138,10 @@ var acc2 = false;
 var isUp = false;
 var isDead = false;
 var flashOnce = true;
+var txt_Idle;
+var txt_Ms;
+var txtIdleOnce = true;
+var txtThrowOnce = true;
 
 Level.prototype.update = function() {
 	
@@ -166,6 +172,13 @@ Level.prototype.update = function() {
 			setTimeout(function(){state.start("YouDie",true,true);}, 2000);
 		}
 	}
+	
+	if(this.checkFoul() && !this.fPlayer.hasThrown){
+		this.camera.fade(0xffffff,1500);
+		var state = this.state;
+		setTimeout(function(){state.start("YouFoul",true,true);}, 1500);
+	}
+	
 	if(this.fJavelin.body.y >= 3500 && !this.fJavelin.hitGround){
 		this.fJavelin.hitGround = true;
 		this.fJavelin.body.allowGravity = false;
@@ -197,9 +210,15 @@ Level.prototype.update = function() {
 	if(this.fPlayer.state.StateName == "Idle" && this.fPlayer.body.velocity.x>2){
 		this.fPlayer.state = StateAccelerate;
 		StateAccelerate.play(this.fPlayer);
+		txt_Idle.destroy();
 	}
 	else if(this.fPlayer.state.StateName == "Idle"){ 
 		this.keepUp("slow");
+		var style = { font: "40px Arial", fill: "#000000", align: "center" };
+		if(txtIdleOnce){
+			txt_Idle = this.add.text(this.fPlayer.body.x+200,this.fPlayer.body.y-300,"Tap -> rapidly to acquire more speed!",style);
+			txtIdleOnce = false;
+		}
 	}
 	if(this.fPlayer.state.StateName == "Accelerating" && this.fPlayer.body.velocity.x<2){
 		this.fPlayer.state = StateIdle;
@@ -216,12 +235,20 @@ Level.prototype.update = function() {
 	if(this.fPlayer.state.StateName == "MaxSpeed" && this.fPlayer.body.velocity.x<650){
 		this.fPlayer.state = StateAccelerate;
 		StateAccelerate.play(this.fPlayer);
+		txt_Ms.destroy();
 	}
 	if(this.fPlayer.state.StateName == "MaxSpeed"){ 
 		this.fPlayer.ms_ani.speed = Math.floor(this.fPlayer.body.velocity.x/50);
 		this.keepUp("fast");
+		var style = { font: "40px Arial", fill: "#000000", align: "center" };
+		if(txtThrowOnce){
+			txt_Ms = this.add.text(this.fPlayer.body.x,this.fPlayer.body.y-300,"Press Space to throw the javelin!",style);
+			txtThrowOnce = false;
+		}
+		this.txtKeepUp();
 		if(this.fSpace_key.isDown){
 			acc2 = true;
+			txt_Ms.destroy();
 		}
 		if(this.fSpace_key.isUp && acc2 && !this.checkFoul() && !this.fPlayer.hasThrown){
 			this.fPlayer.state = StateThrow;		
@@ -293,6 +320,11 @@ Level.prototype.keepUp = function(a){
 	}
 };
 
+Level.prototype.txtKeepUp = function(){
+		txt_Ms.x = this.fPlayer.body.x;
+		txt_Ms.y = this.fPlayer.body.y-300;
+};
+
 Level.prototype.checkFoul= function() {
 	if(this.fPlayer.body.x>=2680){
 		return true;
@@ -318,9 +350,9 @@ Level.prototype.fly = function(){
 	tempSpeed = this.fPlayer.body.velocity.x;
 	this.fPlayer.body.velocity.set(0);
 	magnitude = new Magnitude(this.game,this.fPlayer.x,this.fPlayer.y);
-	angle = new Angle(this.game,this.fPlayer.x,this.fPlayer.y);	
+	angle = new Angle(this.game,this.fPlayer.x-50,this.fPlayer.y-100);	
 	bar_0 = new Bar(this.game,this.fPlayer.x+573,this.fPlayer.y+50);
-	bar_1 = new Bar2(this.game,this.fPlayer.x+100,this.fPlayer.y+56);
+	bar_1 = new Bar2(this.game,this.fPlayer.x+50,this.fPlayer.y-44);
 	exists = true;
 	tempGame = this;
 	this.fSpace_key.onDown.add(this.moveOn);	
