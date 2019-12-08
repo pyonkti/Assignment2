@@ -1,27 +1,26 @@
-function YourRecord() {
+function YouFoul() {
 	Phaser.State.call(this);
 	
 }
 
 /** @type Phaser.State */
-var YourRecord_proto = Object.create(Phaser.State.prototype);
-YourRecord.prototype = YourRecord_proto;
-YourRecord.prototype.constructor = YourRecord;
+var YouFoul_proto = Object.create(Phaser.State.prototype);
+YouFoul.prototype = YouFoul_proto;
+YouFoul.prototype.constructor = YouFoul;
 
-YourRecord.prototype.init = function (record) {
-	this.record = record;
+YouFoul.prototype.init = function () {
 };
 
-YourRecord.prototype.preload = function () {
+YouFoul.prototype.preload = function () {
 	
 	this.load.pack('preloader', 'assets/pack.json');
 	
 };
 
-YourRecord.prototype.create = function () {
+YouFoul.prototype.create = function () {
 	this.stage.backgroundColor = "#ffffff";
 	var style = { font: "65px Arial", fill: "#000000", align: "center" };
-	this.add.text(520,300,this.record,style);
+	this.add.text(450,300,"You Fouled!",style);
 	
 	var pressEnter = this.add.sprite(500.0, 500.0, 'press-enter-text');
 	pressEnter.scale.set(3);
@@ -36,18 +35,18 @@ YourRecord.prototype.create = function () {
 
 /* --- end generated code --- */
 
-YourRecord.prototype.afterCreate = function() {
+YouFoul.prototype.afterCreate = function() {
 	var startKey = this.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 	startKey.onDown.add(this.startGame, this);
 	//
 	this.time.events.loop(700, this.blinkText, this);
 };
 
-YourRecord.prototype.startGame = function() {
+YouFoul.prototype.startGame = function() {
 	this.state.start("Level");
 };
 
-YourRecord.prototype.blinkText = function() {
+YouFoul.prototype.blinkText = function() {
 	if (this.fPressEnter.alpha) {
 		this.fPressEnter.alpha = 0;
 	} else {

@@ -168,10 +168,25 @@
       "type": "script",
       "key": "Bar2",
       "url": "assets/canvas/prefabs/Bar2.js"
+    },
+    {
+      "type": "script",
+      "key": "YourRecord",
+      "url": "assets/canvas/YourRecord.js"
+    },
+    {
+      "type": "script",
+      "key": "YouDie",
+      "url": "assets/canvas/YouDie.js"
+    },
+    {
+      "type": "script",
+      "key": "YouFoul",
+      "url": "assets/canvas/YouFoul.js"
     }
   ],
   "meta": {
-    "generated": "1575754378645",
+    "generated": "1575820027471",
     "app": "Phaser Editor",
     "url": "http://phasereditor.boniatillo.com",
     "version": "1.0",

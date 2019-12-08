@@ -9,7 +9,14 @@ Level.prototype = Level_proto;
 Level.prototype.constructor = Level;
 
 Level.prototype.init = function() {
-
+	hitGround = false;
+	exists = false;
+	bar1_exists = false;
+	acc = false;
+	acc2 = false;
+	isUp = false;
+	isDead = false;
+	flashOnce = true;
 	this.physics.startSystem(Phaser.Physics.ARCADE);
 
 };
@@ -21,7 +28,6 @@ Level.prototype.preload = function() {
 };
 
 Level.prototype.create = function() {
-	this.stage.backgroundColor = "#3ed8fb";
 	this.physics.startSystem(Phaser.Physics.ARCADE);
 	this.physics.arcade.gravity.y = 654;
 	this.world.setBounds(0, 0, 9640, 3600);
@@ -128,7 +134,7 @@ var bar1_exists = false;
 var acc = false;
 var acc2 = false;
 var isUp = false;
-var isDead =false;
+var isDead = false;
 var flashOnce = true;
 
 Level.prototype.update = function() {
@@ -155,7 +161,9 @@ Level.prototype.update = function() {
 			isDead = false;
 			});
 		if(!isDead){
-			this.camera.fade(0xffffff,1500);
+			this.camera.fade(0x000000,1500);
+			var state = this.state;
+			setTimeout(function(){state.start("YouDie",true,true);}, 2000);
 		}
 	}
 	if(this.fJavelin.body.y >= 3500 && !this.fJavelin.hitGround){
@@ -165,8 +173,13 @@ Level.prototype.update = function() {
 		if (this.checkFoul()){
 			this.camera.follow(this.fPlayer,null,0.1,0.1);
 			this.camera.fade(0xffffff,1500);
+			var state = this.state;
+			setTimeout(function(){state.start("YouFoul",true,true);}, 1500);
 		}else{
-			this.camera.fade(0xffffff,1500);
+			var record = Number((this.fJavelin.body.x-2000)/76).toFixed(2);
+			this.camera.fade(0xffffff,3000);
+			var state = this.state;
+			setTimeout(function(){state.start("YourRecord",true,true,record);}, 4000);
 		}
 	}
 	if(bar1_exists){
@@ -272,10 +285,10 @@ Level.prototype.movePlayer = function() {
 
 Level.prototype.keepUp = function(a){
 	if(a == "slow"){
-		this.fJavelin.body.x = this.fPlayer.body.x-100;
+		this.fJavelin.body.x = this.fPlayer.body.x-150;
 		this.fJavelin.body.y = this.fPlayer.body.y+120;
 	}else if (a == "fast" && !this.fPlayer.hasThrown){
-		this.fJavelin.body.x = this.fPlayer.body.x-100;
+		this.fJavelin.body.x = this.fPlayer.body.x-150;
 		this.fJavelin.body.y = this.fPlayer.body.y+55;
 	}
 };
@@ -341,29 +354,3 @@ Level.prototype.moveOn_2 = function(){
 		setTimeout(function(){isDead = true;}, 2000);
 	}
 };
-
-
-/*
-
-Level.prototype.moveAnimation = function() {
-	if (this.fPlayer.body.velocity.y < 0) {
-		this.fPlayer.animations.play("jump");
-	} else if (this.fPlayer.body.velocity.y > 0) {
-		this.fPlayer.animations.play("fall");
-	} else {
-		this.fPlayer.animations.play("skip");
-	}
-};
-
-Level.prototype.stillAnimation = function() {
-	if (this.fPlayer.body.velocity.y < 0) {
-		this.fPlayer.animations.play("jump");
-	} else if (this.fPlayer.body.velocity.y > 0) {
-		this.fPlayer.animations.play("fall");
-	} else if (this.wasd.duck.isDown) {
-		this.fPlayer.animations.play("duck");
-	} else {
-		this.fPlayer.animations.play("idle");
-	}
-};
-*/
