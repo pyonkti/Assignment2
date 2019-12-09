@@ -81,7 +81,7 @@
     {
       "type": "image",
       "key": "title",
-      "url": "assets/images/title-screen.png",
+      "url": "assets/images/thrower1936.png",
       "overwrite": false
     },
     {
@@ -216,7 +216,7 @@
     }
   ],
   "meta": {
-    "generated": "1575836223032",
+    "generated": "1575888101860",
     "app": "Phaser Editor",
     "url": "http://phasereditor.boniatillo.com",
     "version": "1.0",

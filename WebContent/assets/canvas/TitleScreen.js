@@ -34,7 +34,7 @@ TitleScreen.prototype.create = function () {
 	background.scale.set(10);
 	background.autoScroll(10,0);
 	
-	var title = this.add.sprite(320.0, 87.5, 'title');
+	var title = this.add.sprite(270.0, 87.5, 'title');
 	title.scale.set(3);
 	var pressEnter = this.add.sprite(500.0, 500.0, 'press-enter-text');
 	pressEnter.scale.set(3);

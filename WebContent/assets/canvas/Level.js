@@ -308,7 +308,7 @@ Level.prototype.txtKeepUp = function(){
 };
 
 Level.prototype.checkFoul= function() {
-	if(this.fPlayer.body.x>=2680){
+	if(this.fPlayer.body.x>=2750){
 		return true;
 	}
 	return false;
